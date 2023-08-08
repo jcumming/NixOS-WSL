@@ -190,6 +190,12 @@ in
 
           # Include Windows %PATH% in Linux $PATH.
           environment.extraInit = mkIf cfg.interop.includePath ''PATH="$PATH:$WSLPATH"'';
+          environment.systemPackages = [
+            (pkgs.runCommand "wslpath" { } ''
+              mkdir -p $out/bin
+              ln -s /init $out/bin/wslpath
+            '')
+          ];
         })
         (mkIf cfg.nativeSystemd {
           wsl.wslConf = {
